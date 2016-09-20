@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main(void){
+	int a[80];
+	char b[80];
+	int top=-1,i,k,l;
+	int push(int [],int,int);
+	int pop(int [],int);
+	do{
+		printf("Please enter a postfix:");
+		scanf("%s",b);
+		for(i=0;i<strlen(b);i++){
+			if(b[i]=='+' || b[i]== '-' || b[i]=='*' || b[i]=='/'){
+				switch(b[i]){
+					case '+':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						top = push(a,k+l,top);
+					break;
+					case '-':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						if(k>l)
+						top = push(a,k-l,top);
+						else
+						top = push(a,l-k,top);
+					break;
+					case '*':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						top = push(a,k*l,top);
+					break;
+					case '/':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						top = push(a,k/l,top);						
+					break;
+				}
+			}
+			else{
+				b[i] = b[i] - '0';              //有人說，可以這樣寫，的確成功 
+				printf("%d\n",b[i]);
+				//printf("%d\n",(int)b[i]);   //大大的疑問，把字串(?)轉成整數，會出現問題，像我打1，在這裡就會轉成49(Java那本書最後的轉換表有寫) 
+				top = push(a,b[i],top);       //疑問已解，還有問題，就去看臉書上的回答吧 
+			}
+		}
+		printf("%s = %d\n",b,pop(a,top));
+	}while(top<80);
+}
+
+int push(int a[],int b,int top){
+	if(top==80){
+		printf("The array is full");
+		return top;
+	}
+	else{
+		a[top+1] = b;
+		top++;
+		return top;
+	}
+}
+
+int pop(int a[],int top){
+	int temp;
+	temp = a[top];
+	a[top] = 0;
+	return temp;
+}
