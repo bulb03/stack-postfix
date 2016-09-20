@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main(void){
+	int a[80];
+	char b[80];
+	int top=-1,i,k,l;
+	int push(int [],int,int);
+	int pop(int [],int);
+	do{
+		printf("Please enter a postfix:");
+		scanf("%s",b);     //貌似這裡的b，要寫成字串形式，不能寫成指標，即使字串的名稱可以當指標 
+		for(i=0;i<strlen(b);i++){
+			//if(sizeof((int)b[i])==sizeof(int)){        //問題，他根本沒有傳進這裡，推測，大概是b[i]前要加int(這行的)，可是，這樣根本沒有意義(因為b[i]int化後，就一定符合判斷式 
+			if(b[i]=='+' || b[i]== '-' || b[i]=='*' || b[i]=='/'){
+				printf("%d\n",(int)(b[i]));  //test
+				top = push(a,(int)(b[i]),top);
+			}
+			else{
+				switch(b[i]){
+					case '+':
+						k = pop(a,top);
+					//	printf("%d\n");
+						top--;
+						l = pop(a,top);
+						top--;
+					//	printf("%d\n");
+						top = push(a,k+l,top);
+						printf("%s = %d\n",b,pop(a,top));	
+					break;
+				/*	case '-':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						if(k>l)
+						top = push(a,k-l,top);
+						else
+						top = push(a,l-k,top);
+					break;
+					case '*':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						top = push(a,k*l,top);
+					break;
+					case '/':
+						k = pop(a,top);
+						top--;
+						l = pop(a,top);
+						top--;
+						top = push(a,k/l,top);						
+					break;*/ 
+				}
+			}
+		}
+	//	printf("%s = %d\n",b,pop(a,top));
+	}while(top<80);
+}
+
+int push(int a[],int b,int top){
+	if(top==80){
+		printf("The array is full");
+		return top;
+	}
+	else{
+		a[top+1] = b;
+		top++;
+		return top;
+	}
+}
+
+int pop(int a[],int top){
+	int temp;
+	temp = a[top];
+	a[top] = 0;
+	return temp;
+}
